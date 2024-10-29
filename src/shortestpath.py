@@ -150,6 +150,27 @@ def save_path_to_file(path, filename=OUTPUT_PATH):
             file.write(f"{point[0]} {point[1]}\n")
     print(f"Path saved to {filename}")
 
+def combined_waypoints(waypoints_path1, output_path, waypoints_path2, combined_path="../data/combined_waypoints.txt"):
+    combined_waypoints=[]
+
+    with open(waypoints_path1, 'r') as file1:
+        for line in file1:
+            combined_waypoints.append(line.strip())
+
+    with open(output_path, 'r') as file2:
+        for line in file2:
+            combined_waypoints.append(line.strip())
+
+    with open(waypoints_path2, 'r') as file3:
+        for line in file3:
+            combined_waypoints.append(line.strip())
+
+    with open(combined_path, 'w') as outfile:
+        for waypoint in combined_waypoints:
+            outfile.write(f"{waypoint}\n")
+
+    print(f"Combined waypoints saved to {combined_path}")
+
 if __name__ == "__main__":
     load_parameters()
     img = cv2.imread(image_path)
@@ -168,6 +189,7 @@ if __name__ == "__main__":
         path = a_star_search(navigatable_regions, start, goal)
         if path:
             save_path_to_file(path)
+            combined_waypoints(WAYPOINTS_PATH1,OUTPUT_PATH,WAYPOINTS_PATH2)
             plot_image(img, waypoints1, waypoints2, path)
         else:
             print("No path found.")
